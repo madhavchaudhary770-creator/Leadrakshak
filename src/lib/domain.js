@@ -1,6 +1,8 @@
+export function normalizeIndianDigits(value){return String(value??'').replace(/[०-९]/g,d=>String('०१२३४५६७८९'.indexOf(d)))}
+
 export function localDateISO(date=new Date()){const y=date.getFullYear(),m=String(date.getMonth()+1).padStart(2,'0'),day=String(date.getDate()).padStart(2,'0');return y+'-'+m+'-'+day}
 
-export function normalizeIndianMobile(value){return String(value??'').replace(/\D/g,'').slice(-10)}
+export function normalizeIndianMobile(value){return normalizeIndianDigits(value).replace(/\D/g,'').slice(-10)}
 export function isValidIndianMobile(value){return /^[6-9]\d{9}$/.test(normalizeIndianMobile(value))}
 export function calculateQuotation(items=[],discount=0,taxPercent=0){
  const subtotal=items.reduce((sum,item)=>sum+Math.max(0,Number(item.qty)||0)*Math.max(0,Number(item.rate)||0),0);
@@ -24,7 +26,7 @@ export function followUpBucket(date,status,today=new Date().toISOString().slice(
 export function parseLeadVoiceCommand(input, baseDate = new Date()) {
  const raw=String(input??'').trim();
  if(!raw)return {name:'',phone:'',service:'',follow:'',notes:''};
- const digits=raw.replace(/[०-९]/g,d=>String('०१२३४५६७८९'.indexOf(d)));
+ const digits=normalizeIndianDigits(raw);
  const phoneMatch=digits.match(/(?:\+?91[\s-]*)?([6-9]\d{9})/);
  const phone=phoneMatch?phoneMatch[1]:'';
  let before=phoneMatch?digits.slice(0,phoneMatch.index):digits;
