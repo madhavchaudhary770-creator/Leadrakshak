@@ -79,7 +79,7 @@ as $$
 declare new_workspace uuid;
 begin
   insert into public.workspaces(name,created_by)
-  values(coalesce(nullif(new.raw_user_meta_data->>'full_name',''),'My') || '''s Workspace',new.id)
+  values(case when nullif(new.raw_user_meta_data->>'full_name','') is null then 'My Workspace' else new.raw_user_meta_data->>'full_name' || '''s Workspace' end,new.id)
   returning id into new_workspace;
   insert into public.workspace_members(workspace_id,user_id,role)
   values(new_workspace,new.id,'owner');
@@ -101,7 +101,7 @@ begin
     where not exists(select 1 from public.workspace_members wm where wm.user_id=u.id)
   loop
     insert into public.workspaces(name,created_by)
-    values(coalesce(nullif(existing_user.raw_user_meta_data->>'full_name',''),'My') || '''s Workspace',existing_user.id)
+    values(case when nullif(existing_user.raw_user_meta_data->>'full_name','') is null then 'My Workspace' else existing_user.raw_user_meta_data->>'full_name' || '''s Workspace' end,existing_user.id)
     returning id into new_workspace;
     insert into public.workspace_members(workspace_id,user_id,role)
     values(new_workspace,existing_user.id,'owner');
