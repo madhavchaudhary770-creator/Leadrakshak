@@ -30,7 +30,9 @@ Hindi-friendly lead recovery and follow-up CRM for Indian small businesses.
 ## Security and limitations
 - Database tables use Row Level Security and workspace membership checks.
 - Each new authenticated user receives a personal workspace.
-- Browser local mode stores data only on that browser/device; it is not cloud sync.
+- Browser local mode stores data only on that browser/device; it is not cloud sync. Cloud accounts and sync require BOTH `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` GitHub Actions secrets. If either is missing, the site intentionally runs in local-demo mode.
+- Voice input uses the browser Web Speech API where supported (typically Chrome/Chromium). Speech recognition may be processed by the browser provider; do not dictate highly sensitive information. Microphone permission is required and typing remains available.
+- Voice capture fills a draft. The user must review and press Save; it does not silently create records.
 - WhatsApp links open a prefilled message for the user to review/send; the app does not send messages automatically.
-- Quotations are estimates, not GST-compliant tax invoices.
-- Before commercial use, configure Supabase email verification, backups, billing limits and privacy/terms details.
+- Quotations are estimates, not GST-compliant tax invoices. No payment gateway or subscription billing is currently connected.
+- Before commercial use, verify Supabase Auth email settings, run the SQL migration, configure both public secrets, test real sign-up/login/data isolation, enable backups, set billing limits and publish a reviewed privacy policy and terms.
