@@ -1,3 +1,5 @@
+export function localDateISO(date=new Date()){const y=date.getFullYear(),m=String(date.getMonth()+1).padStart(2,'0'),day=String(date.getDate()).padStart(2,'0');return y+'-'+m+'-'+day}
+
 export function normalizeIndianMobile(value){return String(value??'').replace(/\D/g,'').slice(-10)}
 export function isValidIndianMobile(value){return /^[6-9]\d{9}$/.test(normalizeIndianMobile(value))}
 export function calculateQuotation(items=[],discount=0,taxPercent=0){
