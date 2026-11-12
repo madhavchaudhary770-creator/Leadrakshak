@@ -92,7 +92,7 @@ create trigger on_auth_user_created_workspace after insert on auth.users
 for each row execute procedure public.create_personal_workspace();
 
 -- Backfill users who registered before this migration was applied.
-do $
+do $$
 declare existing_user record; new_workspace uuid;
 begin
   for existing_user in
@@ -106,7 +106,7 @@ begin
     insert into public.workspace_members(workspace_id,user_id,role)
     values(new_workspace,existing_user.id,'owner');
   end loop;
-end $;
+end $$;
 
 create or replace function public.touch_updated_at()
 returns trigger language plpgsql as $$ begin new.updated_at=now(); return new; end; $$;
