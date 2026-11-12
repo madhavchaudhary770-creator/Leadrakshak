@@ -41,8 +41,13 @@ export function parseLeadVoiceCommand(input, baseDate = new Date()) {
  if(serviceLabel){name=cleaned.slice(0,serviceLabel.index);service=cleaned.slice(serviceLabel.index+serviceLabel[0].length);}
  else {
   const parts=cleaned.split(/[,;।]+/).map(x=>x.trim()).filter(Boolean);
-  name=parts.shift()||'';
-  service=parts.join(', ');
+  if(parts.length>1){name=parts.shift()||'';service=parts.join(', ');}
+  else {
+   const mobileLabel=cleaned.match(/(?:मोबाइल नंबर|मोबाइल|फोन नंबर|फोन|mobile number|mobile|phone)[:：]?/i);
+   if(mobileLabel&&mobileLabel.index>0&&cleaned.slice(mobileLabel.index+mobileLabel[0].length).trim()){
+    name=cleaned.slice(0,mobileLabel.index);service=cleaned.slice(mobileLabel.index+mobileLabel[0].length);
+   }else name=cleaned;
+  }
  }
  name=name.replace(/(ग्राहक का नाम|नाम|customer name|name)[:：]?/gi,'').replace(/(मोबाइल नंबर|मोबाइल|फोन नंबर|फोन|mobile number|mobile|phone)[:：]?/gi,'').replace(/^[\\s,;:।-]+|[\\s,;:।-]+$/g,'').trim();
  service=service.replace(/(मोबाइल नंबर|मोबाइल|फोन नंबर|फोन|mobile number|mobile|phone)[:：]?/gi,'').replace(/(ग्राहक का नाम|customer name)[:：]?/gi,'').replace(/^[\\s,;:।-]+|[\\s,;:।-]+$/g,'').trim();
