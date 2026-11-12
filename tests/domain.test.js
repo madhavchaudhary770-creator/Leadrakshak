@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {normalizeIndianMobile,isValidIndianMobile,calculateQuotation,buildCsv,followUpBucket} from '../src/lib/domain.js';
+import {normalizeIndianMobile,isValidIndianMobile,calculateQuotation,buildCsv,followUpBucket,parseLeadVoiceCommand} from '../src/lib/domain.js';
 
 test('normalizes and validates Indian mobile numbers',()=>{
  assert.equal(normalizeIndianMobile('+91 98765 43210'),'9876543210');
@@ -27,4 +27,19 @@ test('classifies follow-up dates and closed leads',()=>{
  assert.equal(followUpBucket('2026-11-12','New','2026-11-12'),'today');
  assert.equal(followUpBucket('2026-11-13','New','2026-11-12'),'upcoming');
  assert.equal(followUpBucket('2026-11-12','Won','2026-11-12'),'closed');
+});
+
+test('parses a spoken lead command and tomorrow follow-up',()=>{
+ const parsed=parseLeadVoiceCommand('Rahul Kumar, mobile 9876543210, CCTV installation, tomorrow follow-up karna hai',new Date('2026-11-12T10:00:00'));
+ assert.equal(parsed.name,'Rahul Kumar');
+ assert.equal(parsed.phone,'9876543210');
+ assert.match(parsed.service,/CCTV installation/i);
+ assert.equal(parsed.follow,'2026-11-13');
+ assert.ok(parsed.notes.includes('Rahul Kumar'));
+});
+test('parses Hindi numerals in a spoken mobile number',()=>{
+ const parsed=parseLeadVoiceCommand('राहुल कुमार मोबाइल ९८७६५४३२१० CCTV कल follow-up',new Date('2026-11-12T10:00:00'));
+ assert.equal(parsed.phone,'9876543210');
+ assert.equal(parsed.name,'राहुल कुमार');
+ assert.equal(parsed.follow,'2026-11-13');
 });
