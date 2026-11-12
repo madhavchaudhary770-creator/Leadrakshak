@@ -53,3 +53,18 @@ test('normalizes Devanagari numerals from voice dictation',()=>{
  assert.equal(normalizeIndianDigits('९८७६५४३२१०'),'9876543210');
  assert.equal(normalizeIndianMobile('९८७६५४३२१०'),'9876543210');
 });
+
+test('parses a spoken lead when service is said before the mobile number',()=>{
+ const parsed=parseLeadVoiceCommand('Rahul Kumar, CCTV installation, mobile 9876543210, tomorrow follow-up',new Date(2026,10,12,10));
+ assert.equal(parsed.name,'Rahul Kumar');
+ assert.equal(parsed.phone,'9876543210');
+ assert.equal(parsed.service,'CCTV installation');
+ assert.equal(parsed.follow,'2026-11-13');
+});
+test('parses a Hindi labelled voice enquiry',()=>{
+ const parsed=parseLeadVoiceCommand('नाम: राहुल कुमार, मोबाइल: ९८७६५४३२१०, सेवा: CCTV, कल follow-up',new Date(2026,10,12,10));
+ assert.equal(parsed.name,'राहुल कुमार');
+ assert.equal(parsed.phone,'9876543210');
+ assert.equal(parsed.service,'CCTV');
+ assert.equal(parsed.follow,'2026-11-13');
+});
