@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {normalizeIndianMobile,isValidIndianMobile,calculateQuotation,buildCsv,followUpBucket,parseLeadVoiceCommand} from '../src/lib/domain.js';
+import {normalizeIndianMobile,isValidIndianMobile,calculateQuotation,buildCsv,followUpBucket,parseLeadVoiceCommand,localDateISO} from '../src/lib/domain.js';
 
 test('normalizes and validates Indian mobile numbers',()=>{
  assert.equal(normalizeIndianMobile('+91 98765 43210'),'9876543210');
@@ -42,4 +42,9 @@ test('parses Hindi numerals in a spoken mobile number',()=>{
  assert.equal(parsed.phone,'9876543210');
  assert.equal(parsed.name,'राहुल कुमार');
  assert.equal(parsed.follow,'2026-11-13');
+});
+
+test('formats calendar dates in local time without UTC day shifts',()=>{
+ const date=new Date(2026,10,12,0,15,0);
+ assert.equal(localDateISO(date),'2026-11-12');
 });
