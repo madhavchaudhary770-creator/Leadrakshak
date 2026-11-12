@@ -11,3 +11,15 @@
 
 .saved-quotes{margin-top:25px;border-top:1px solid #2a354c;padding-top:16px}.saved-quotes h4{margin:0 0 9px;color:#e8edf9;font:700 12px Manrope}.saved-quote-row{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid #253047}.saved-quote-row>div{flex:1}.saved-quote-row b{display:block;color:#e5ebf7;font-size:10px}.saved-quote-row small{display:block;color:#8793aa;font-size:9px;margin-top:4px}.saved-quote-row strong{font-size:11px;color:#c2bcff}
 @media(max-width:760px){.saved-quote-row{gap:7px;flex-wrap:wrap}.saved-quote-row>div{min-width:55%}}
+
+/* Voice-first lead capture */
+.voice-field{display:flex;align-items:stretch;gap:7px;min-width:0}
+.voice-field>input,.voice-field>textarea{flex:1;min-width:0}
+.voice-notes{align-items:flex-start}
+.voice-control{display:flex;flex-direction:column;align-items:flex-start;gap:4px;flex:0 0 auto}
+.voice-btn{display:inline-flex;align-items:center;justify-content:center;gap:5px;min-height:38px;padding:0 10px;border:1px solid #454b79;border-radius:8px;background:#242746;color:#c5c1ff;font-size:10px;font-weight:700;white-space:nowrap}
+.voice-btn:hover{background:#34345f;color:#fff}
+.voice-btn.is-listening{background:#633448;border-color:#d36b8b;color:#fff;animation:voicePulse 1.1s ease-in-out infinite}
+.voice-message{max-width:180px;color:#9eabc1;font-size:9px;line-height:1.35;overflow-wrap:anywhere}
+@keyframes voicePulse{50%{box-shadow:0 0 0 4px #e76c8b30}}
+@media(max-width:420px){.voice-btn{padding:0 8px;font-size:9px}}
