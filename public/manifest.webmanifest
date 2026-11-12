@@ -1,0 +1,15 @@
+{
+  "id": "./",
+  "name": "LeadRakshak CRM",
+  "short_name": "LeadRakshak",
+  "description": "Hindi-friendly lead management and follow-up workspace for small businesses.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#0a0f1d",
+  "theme_color": "#0a0f1d",
+  "orientation": "portrait-primary",
+  "icons": [
+    {"src":"./icon.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}
+  ]
+}
