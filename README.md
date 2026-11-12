@@ -1,19 +1,34 @@
 # LeadRakshak
 
-Hindi-friendly lead management and follow-up CRM for small businesses.
+Hindi-friendly lead recovery and follow-up CRM for Indian small businesses.
 
-## Run locally
+## Included
+- Animated responsive CRM dashboard, lead pipeline and analytics
+- Lead capture, edit, search, status filters and follow-up queue
+- User-confirmed WhatsApp follow-up links (no automated sending)
+- Quotation builder with line items, discount, tax estimate and print-to-PDF
+- CSV export and JSON backup/restore
+- Supabase email/password authentication, password reset and per-workspace cloud data (when configured)
+- PostgreSQL schema, indexes and Row Level Security policies
+- Local-only mode when Supabase environment variables are absent
 
-- npm install
-- npm run dev
-- npm run build
+## Local setup
+1. Install Node.js 22 or newer.
+2. Run `npm install`.
+3. Copy `.env.example` to `.env.local`.
+4. Create a Supabase project and copy its Project URL and publishable/anon key into `.env.local`.
+5. In Supabase SQL Editor, run `supabase/migrations/001_initial_schema.sql`.
+6. In Supabase Authentication > URL Configuration, add your app URL to Site URL and Redirect URLs.
+7. Run `npm run dev`; run `npm run build` before publishing.
 
-## MVP
-- Dashboard metrics and lead pipeline
-- Add, edit, search, filter and delete enquiries
-- Follow-up queue
-- WhatsApp-ready messages (user confirms sending)
-- CSV export
-- Responsive UI with CSS 3D animated visual
+## Environment
+- `VITE_SUPABASE_URL`
+- `VITE_SUPABASE_ANON_KEY` (publishable/anon key only; never use service_role in browser)
 
-Data in this MVP stays in browser localStorage. Do not commit secrets or private customer data.
+## Security and limitations
+- Database tables use Row Level Security and workspace membership checks.
+- Each new authenticated user receives a personal workspace.
+- Browser local mode stores data only on that browser/device; it is not cloud sync.
+- WhatsApp links open a prefilled message for the user to review/send; the app does not send messages automatically.
+- Quotations are estimates, not GST-compliant tax invoices.
+- Before commercial use, configure Supabase email verification, backups, billing limits and privacy/terms details.
