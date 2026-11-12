@@ -16,7 +16,7 @@ export function buildCsv(rows=[],columns=[]){
  const cell=value=>'"'+String(value??'').replace(/"/g,'""')+'"';
  return '\uFEFF'+[columns.map(cell).join(','),...rows.map(row=>columns.map(key=>cell(row[key])).join(','))].join('\r\n');
 }
-export function followUpBucket(date,status,today=new Date().toISOString().slice(0,10)){
+export function followUpBucket(date,status,today=localDateISO()){
  if(!date||['Won','Lost'].includes(status))return'closed';
  if(date<today)return'overdue';
  if(date===today)return'today';
