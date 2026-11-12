@@ -64,6 +64,7 @@ create table if not exists public.lead_activities (
   created_at timestamptz not null default now()
 );
 
+create index if not exists workspace_members_user_idx on public.workspace_members(user_id,workspace_id);
 create index if not exists leads_workspace_follow_idx on public.leads(workspace_id,follow_up_at);
 create index if not exists leads_workspace_status_idx on public.leads(workspace_id,status);
 create index if not exists quotations_workspace_created_idx on public.quotations(workspace_id,created_at desc);
