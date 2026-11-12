@@ -23,3 +23,11 @@
 .voice-message{max-width:180px;color:#9eabc1;font-size:9px;line-height:1.35;overflow-wrap:anywhere}
 @keyframes voicePulse{50%{box-shadow:0 0 0 4px #e76c8b30}}
 @media(max-width:420px){.voice-btn{padding:0 8px;font-size:9px}}
+
+.voice-command{display:flex;align-items:center;justify-content:space-between;gap:14px;margin:14px 0;padding:13px 14px;border:1px solid #41476f;border-radius:12px;background:#171d35}
+.voice-command>div{display:flex;flex-direction:column;gap:4px;min-width:0}
+.voice-command b{font-size:12px;color:#f0f1ff}
+.voice-command small{font-size:10px;color:#9da8c2;line-height:1.4}
+.voice-command .voice-transcript{color:#c9c4ff;overflow-wrap:anywhere}
+.voice-command .voice-error{color:#ffb1b1}
+@media(max-width:520px){.voice-command{align-items:flex-start;flex-direction:column}.voice-command .voice-btn{align-self:flex-start}}
