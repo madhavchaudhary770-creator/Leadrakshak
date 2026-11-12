@@ -23,7 +23,7 @@ export function parseLeadVoiceCommand(input, baseDate = new Date()) {
  const raw=String(input??'').trim();
  if(!raw)return {name:'',phone:'',service:'',follow:'',notes:''};
  const digits=raw.replace(/[०-९]/g,d=>String('०१२३४५६७८९'.indexOf(d)));
- const phoneMatch=digits.match(/(?:\\+?91[\\s-]*)?([6-9]\\d{9})/);
+ const phoneMatch=digits.match(/(?:\+?91[\s-]*)?([6-9]\d{9})/);
  const phone=phoneMatch?phoneMatch[1]:'';
  let before=phoneMatch?digits.slice(0,phoneMatch.index):digits;
  let after=phoneMatch?digits.slice(phoneMatch.index+phoneMatch[0].length):'';
@@ -31,9 +31,9 @@ export function parseLeadVoiceCommand(input, baseDate = new Date()) {
  const name=before.replace(/[,:;।]+$/,'').trim();
  let follow='';
  const lower=after.toLowerCase();
- const tomorrow=/\\b(tomorrow)\\b|कल/.test(lower);
- const today=/\\b(today)\\b|आज/.test(lower);
+ const tomorrow=/\b(tomorrow)\b|कल/.test(lower);
+ const today=/\b(today)\b|आज/.test(lower);
  if(tomorrow||today){const d=new Date(baseDate);d.setDate(d.getDate()+(tomorrow?1:0));follow=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
- let service=after.replace(/(कल|आज|tomorrow|today).*/i,'').replace(/(फॉलो.?अप|follow.?up|करना है|रखना है|है)$/gi,'').replace(/^[\\s,;:।-]+|[\\s,;:।-]+$/g,'').trim();
+ let service=after.replace(/(कल|आज|tomorrow|today).*/i,'').replace(/(फॉलो.?अप|follow.?up|करना है|रखना है|है)$/gi,'').replace(/^[\s,;:।-]+|[\s,;:।-]+$/g,'').trim();
  return {name,phone,service,follow,notes:raw};
 }
