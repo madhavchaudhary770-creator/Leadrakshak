@@ -18,8 +18,10 @@ Hindi-friendly lead recovery and follow-up CRM for Indian small businesses.
 3. Copy `.env.example` to `.env.local`.
 4. Create a Supabase project and copy its Project URL and publishable/anon key into `.env.local`.
 5. In Supabase SQL Editor, run `supabase/migrations/001_initial_schema.sql`.
-6. In Supabase Authentication > URL Configuration, add your app URL to Site URL and Redirect URLs.
-7. Run `npm run dev`; run `npm run build` before publishing.
+6. In Supabase Authentication > URL Configuration, add `https://madhavchaudhary770-creator.github.io/Leadrakshak/` to Site URL and Redirect URLs.
+7. In GitHub repository Settings > Secrets and variables > Actions, add `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` using the Supabase Project URL and publishable/anon key. Never add a service_role key.
+8. In GitHub Actions, run **LeadRakshak Build and Deploy** manually to rebuild with the secrets.
+9. Run `npm run dev`, `npm test` and `npm run build` for local development/verification.
 
 ## Environment
 - `VITE_SUPABASE_URL`
