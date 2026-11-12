@@ -20,10 +20,16 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-      - name: Verify Supabase public configuration
+      - name: Check optional Supabase public configuration
         run: |
-          test -n "$VITE_SUPABASE_URL" || (echo "Missing GitHub Actions secret: VITE_SUPABASE_URL" && exit 1)
-          test -n "$VITE_SUPABASE_ANON_KEY" || (echo "Missing GitHub Actions secret: VITE_SUPABASE_ANON_KEY" && exit 1)
+          if [ -z "$VITE_SUPABASE_URL" ] && [ -z "$VITE_SUPABASE_ANON_KEY" ]; then
+            echo "::warning::Supabase secrets are not configured. Deploying local-demo mode; cloud signup and sync will be unavailable."
+          elif [ -z "$VITE_SUPABASE_URL" ] || [ -z "$VITE_SUPABASE_ANON_KEY" ]; then
+            echo "::error::Configure BOTH VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY, or leave both unset."
+            exit 1
+          else
+            echo "Supabase public configuration detected."
+          fi
       - run: npm install
       - run: npm test
       - run: npm run build
