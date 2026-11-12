@@ -27,17 +27,24 @@ export function parseLeadVoiceCommand(input, baseDate = new Date()) {
  const raw=String(input??'').trim();
  if(!raw)return {name:'',phone:'',service:'',follow:'',notes:''};
  const digits=normalizeIndianDigits(raw);
- const phoneMatch=digits.match(/(?:\+?91[\s-]*)?([6-9]\d{9})/);
+ const phoneMatch=digits.match(/(?:\\+?91[\\s-]*)?([6-9]\\d{9})/);
  const phone=phoneMatch?phoneMatch[1]:'';
- let before=phoneMatch?digits.slice(0,phoneMatch.index):digits;
- let after=phoneMatch?digits.slice(phoneMatch.index+phoneMatch[0].length):'';
- before=before.replace(/(ग्राहक का नाम|नाम|customer name|name)[:：]?/gi,'').replace(/(मोबाइल नंबर|मोबाइल|फोन नंबर|फोन|mobile number|mobile|phone)[:：]?/gi,'').trim();
- const name=before.replace(/[,:;।]+$/,'').trim();
+ let cleaned=phoneMatch?digits.slice(0,phoneMatch.index)+' '+digits.slice(phoneMatch.index+phoneMatch[0].length):digits;
+ cleaned=cleaned.replace(/\\s+/g,' ').trim();
+ const tomorrow=/\\btomorrow\\b|कल/i.test(digits),today=/\\btoday\\b|आज/i.test(digits);
  let follow='';
- const lower=after.toLowerCase();
- const tomorrow=/\b(tomorrow)\b|कल/.test(lower);
- const today=/\b(today)\b|आज/.test(lower);
- if(tomorrow||today){const d=new Date(baseDate);d.setDate(d.getDate()+(tomorrow?1:0));follow=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
- let service=after.replace(/(कल|आज|tomorrow|today).*/i,'').replace(/(फॉलो.?अप|follow.?up|करना है|रखना है|है)$/gi,'').replace(/^[\s,;:।-]+|[\s,;:।-]+$/g,'').trim();
+ if(tomorrow||today){const date=new Date(baseDate);date.setDate(date.getDate()+(tomorrow?1:0));follow=localDateISO(date);}
+ cleaned=cleaned.replace(/(?:कल|आज|tomorrow|today).*$/i,'').trim();
+ cleaned=cleaned.replace(/(?:फॉलो.?अप|follow.?up|करना है|रखना है|है)$/gi,'').trim();
+ const serviceLabel=cleaned.match(/(?:सेवा|काम|service|requirement)\\s*[:：]?\\s*/i);
+ let name='',service='';
+ if(serviceLabel){name=cleaned.slice(0,serviceLabel.index);service=cleaned.slice(serviceLabel.index+serviceLabel[0].length);}
+ else {
+  const parts=cleaned.split(/[,;।]+/).map(x=>x.trim()).filter(Boolean);
+  name=parts.shift()||'';
+  service=parts.join(', ');
+ }
+ name=name.replace(/(ग्राहक का नाम|नाम|customer name|name)[:：]?/gi,'').replace(/(मोबाइल नंबर|मोबाइल|फोन नंबर|फोन|mobile number|mobile|phone)[:：]?/gi,'').replace(/^[\\s,;:।-]+|[\\s,;:।-]+$/g,'').trim();
+ service=service.replace(/(मोबाइल नंबर|मोबाइल|फोन नंबर|फोन|mobile number|mobile|phone)[:：]?/gi,'').replace(/(ग्राहक का नाम|customer name)[:：]?/gi,'').replace(/^[\\s,;:।-]+|[\\s,;:।-]+$/g,'').trim();
  return {name,phone,service,follow,notes:raw};
 }
