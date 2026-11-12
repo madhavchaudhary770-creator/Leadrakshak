@@ -91,6 +91,23 @@ drop trigger if exists on_auth_user_created_workspace on auth.users;
 create trigger on_auth_user_created_workspace after insert on auth.users
 for each row execute procedure public.create_personal_workspace();
 
+-- Backfill users who registered before this migration was applied.
+do $
+declare existing_user record; new_workspace uuid;
+begin
+  for existing_user in
+    select u.id, u.raw_user_meta_data
+    from auth.users u
+    where not exists(select 1 from public.workspace_members wm where wm.user_id=u.id)
+  loop
+    insert into public.workspaces(name,created_by)
+    values(coalesce(nullif(existing_user.raw_user_meta_data->>'full_name',''),'My') || '''s Workspace',existing_user.id)
+    returning id into new_workspace;
+    insert into public.workspace_members(workspace_id,user_id,role)
+    values(new_workspace,existing_user.id,'owner');
+  end loop;
+end $;
+
 create or replace function public.touch_updated_at()
 returns trigger language plpgsql as $$ begin new.updated_at=now(); return new; end; $$;
 drop trigger if exists leads_touch_updated_at on public.leads;
