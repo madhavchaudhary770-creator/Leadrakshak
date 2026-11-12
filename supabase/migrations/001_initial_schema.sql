@@ -112,10 +112,24 @@ drop policy if exists "members can read membership" on public.workspace_members;
 create policy "members can read membership" on public.workspace_members for select to authenticated using (public.is_workspace_member(workspace_id));
 
 drop policy if exists "members manage own workspace leads" on public.leads;
-create policy "members manage own workspace leads" on public.leads for all to authenticated using (public.is_workspace_member(workspace_id)) with check (public.is_workspace_member(workspace_id) and created_by=auth.uid());
+drop policy if exists "workspace members read leads" on public.leads;
+drop policy if exists "workspace members insert leads" on public.leads;
+drop policy if exists "workspace members update leads" on public.leads;
+drop policy if exists "workspace members delete leads" on public.leads;
+create policy "workspace members read leads" on public.leads for select to authenticated using (public.is_workspace_member(workspace_id));
+create policy "workspace members insert leads" on public.leads for insert to authenticated with check (public.is_workspace_member(workspace_id) and created_by=auth.uid());
+create policy "workspace members update leads" on public.leads for update to authenticated using (public.is_workspace_member(workspace_id)) with check (public.is_workspace_member(workspace_id));
+create policy "workspace members delete leads" on public.leads for delete to authenticated using (public.is_workspace_member(workspace_id));
 
 drop policy if exists "members manage workspace quotations" on public.quotations;
-create policy "members manage workspace quotations" on public.quotations for all to authenticated using (public.is_workspace_member(workspace_id)) with check (public.is_workspace_member(workspace_id) and created_by=auth.uid());
+drop policy if exists "workspace members read quotations" on public.quotations;
+drop policy if exists "workspace members insert quotations" on public.quotations;
+drop policy if exists "workspace members update quotations" on public.quotations;
+drop policy if exists "workspace members delete quotations" on public.quotations;
+create policy "workspace members read quotations" on public.quotations for select to authenticated using (public.is_workspace_member(workspace_id));
+create policy "workspace members insert quotations" on public.quotations for insert to authenticated with check (public.is_workspace_member(workspace_id) and created_by=auth.uid());
+create policy "workspace members update quotations" on public.quotations for update to authenticated using (public.is_workspace_member(workspace_id)) with check (public.is_workspace_member(workspace_id));
+create policy "workspace members delete quotations" on public.quotations for delete to authenticated using (public.is_workspace_member(workspace_id));
 
 drop policy if exists "members read workspace activities" on public.lead_activities;
 create policy "members read workspace activities" on public.lead_activities for select to authenticated using (public.is_workspace_member(workspace_id));
